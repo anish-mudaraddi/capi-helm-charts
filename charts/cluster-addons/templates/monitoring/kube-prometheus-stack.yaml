@@ -69,7 +69,11 @@ stringData:
         dashboards:
           searchNamespace: ALL
   overrides: |
-    {{- toYaml .Values.monitoring.kubePrometheusStack.release.values | nindent 4 }}
+    {{- if typeIs "map[string]interface {}" .Values.monitoring.kubePrometheusStack.release.values }}
+    {{ toYaml .Values.monitoring.kubePrometheusStack.release.values | nindent 4 }}
+    {{- else }}
+    {{ .Values.monitoring.kubePrometheusStack.release.values | toString | nindent 4 }}
+    {{- end }}
 ---
 apiVersion: addons.stackhpc.com/v1alpha1
 kind: HelmRelease
